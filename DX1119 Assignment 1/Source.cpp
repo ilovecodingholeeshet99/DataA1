@@ -11,7 +11,7 @@ int main()
 		EnlargeTextSize(); // Sets console size text
 		PrintNumbers(); // UI
 		playerMap.PrintPath();
-		playerMap.MoveIndicator(UserInput());
+		playerMap.UserMovement(UserInput());
 		system("CLS");
 	}
 };

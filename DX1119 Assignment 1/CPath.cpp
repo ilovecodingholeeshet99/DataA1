@@ -17,7 +17,7 @@ CNode* CPath::GetTail()
     return tail;
 }
 
-void CPath::AddNode(char map)
+void CPath::AddInitNode(char map) // Functions adding nodes to back of LL, a init node function
 {
     if (head == nullptr) // If LL is empty 
     {
@@ -51,6 +51,38 @@ void CPath::DeleteNode(CNode* NodeToDelete)
     delete NodeToDelete; // Delete node to delete
 }
 
+void CPath::AddPlayerNode(char w) // Need to check if playerPosition has traversed until the indicator
+{
+    CNode* temp = head; // 2 temps that point to head
+    CNode* temp2;
+    while (temp != indicator) // Traverse until temp reaches indicator
+    {
+        temp = temp->GetNextNode();
+    }
+    temp2 = temp->GetNextNode(); // Now that temp points to the indicator, set Temp2 to point to temp/indicators next node
+    CNode* newNode = new CNode; // Node to add
+    newNode->SetChar('w');
+    temp->SetNextNode(newNode); // Temp/Indicator next node is the newNode created
+    newNode->SetPrevNode(temp); // newNode previous pointer points to the temp/indicator
+    newNode->SetNextNode(temp2); // Setting the newNode's new node to point to temp2, which points to indicators old next node
+    temp2->SetPrevNode(newNode); // Setting indicators old next node's previous node to point to the newNode created
+}
+
+void CPath::DeletePlayerNode()
+{
+    CNode* temp = head; // Temp pointer to point to node before indicator
+    CNode* temp2 = head; // Another temp ptr to point to node after indicator
+    while (temp->GetNextNode() != indicator) // While temp's next node is not the indicator
+    {
+        temp = temp->GetNextNode(); 
+    }
+    temp2 = indicator->GetNextNode();
+    // At the node before the indicator
+    temp->SetNextNode(temp2);
+    temp2->SetPrevNode(temp);
+}
+
+
 void CPath::PrintPath()
 {
     int count = 0; // Init count for when to endl
@@ -67,10 +99,11 @@ void CPath::PrintPath()
         {
             std::cout << temp->GetInfo() << "-"; // Adjacent nodes have '-'
             temp = temp->GetNextNode();
-        count += 1;
         }
-        if (count % 21 == 20 || count % 41 == 20) // 20 so end of row does not end with '-'
+        count += 1;
+        if (count == 20) // 20 so end of row does not end with '-'
         {
+            count = 0;
             std::cout << std::endl;
             PrintIndicator(start);
             start = temp;
@@ -99,26 +132,26 @@ void CPath::PrintIndicator(CNode* start) // Prints indicator and locates where i
     }
 }
 
-void CPath::MoveIndicator(int direction)
+void CPath::UserMovement(int enter)
 {
-    if (direction == 1) // If direction
+    if (enter == 1) // If direction
     {
         if (indicator->GetPrevNode() == nullptr)
-            return;
+            return; // Stop player from moving out of map
         indicator = indicator->GetPrevNode();
     }
-    else if (direction == 2)
+    else if (enter == 2)
     {
         if (indicator->GetNextNode() == nullptr)
             return;
         indicator = indicator->GetNextNode();
     }
-    else if (direction == 3)
+    else if (enter == 3)
     {
-        AddNode('w');
+        AddPlayerNode('w');
     }
-    else if (direction == 4)
+    else if (enter == 4)
     {
-        DeleteNode(indicator);
+        DeletePlayerNode();
     }
 }

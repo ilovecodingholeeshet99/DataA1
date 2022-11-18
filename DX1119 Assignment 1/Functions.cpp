@@ -25,12 +25,12 @@ void PrintNumbers()
 
 void InitNodes(CPath* map)
 {
-	map->AddNode('S'); // Entry map node
+	map->AddInitNode('S'); // Entry map node
 	for (int i = 0; i <= 50; i++)
 	{
-		map->AddNode('o');
+		map->AddInitNode('o');
 	}
-	map->AddNode('E'); // End map node
+	map->AddInitNode('E'); // End map node
 }
 
 void EnlargeTextSize()

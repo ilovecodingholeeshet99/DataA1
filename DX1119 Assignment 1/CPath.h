@@ -9,16 +9,18 @@ private:
 	CNode* indicator;
 public:
 	CPath();
-	// Getters 
+	// ------------ Getters ----------- 
 	CNode* GetHead();
 	CNode* GetTail();
-	// Data manipulation
-	void AddNode(char map);
+	// ---------- Data manipulation --------
+	void AddInitNode(char map);
 	void DeleteNode(CNode* playerPosition);
-	// Printing
+	void AddPlayerNode(char w); // AddPlayerNode function handles adding nodes whenever user presses 3
+	void DeletePlayerNode(); // DeletePlayerNode function deletes the node whereever the player's indicator is
+	// ------------- Printing -----------
 	void PrintPath();
 	void PrintIndicator(CNode* start);
-	//Movement
-	void MoveIndicator(int direction);
+	// ------------- Movement -----------
+	void UserMovement(int direction);
 };
 
