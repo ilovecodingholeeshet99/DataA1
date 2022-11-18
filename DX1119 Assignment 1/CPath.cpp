@@ -80,6 +80,7 @@ void CPath::DeletePlayerNode()
     // At the node before the indicator
     temp->SetNextNode(temp2);
     temp2->SetPrevNode(temp);
+    delete indicator;
 }
 
 
@@ -143,7 +144,13 @@ void CPath::UserMovement(int enter)
     else if (enter == 2)
     {
         if (indicator->GetNextNode() == nullptr)
-            return;
+        {
+            indicator = tail->GetPrevNode(); // Indicator will point to the previous last node IF player moves after the End(E) node
+            tail->SetChar('o'); // Set char to 'o' if player moves forward after reaching E
+            AddInitNode('E'); // Keep adding E at the back if player keeps moving forward past E
+            /*return;*/
+        }
+
         indicator = indicator->GetNextNode();
     }
     else if (enter == 3)
@@ -151,7 +158,7 @@ void CPath::UserMovement(int enter)
         AddPlayerNode('w');
     }
     else if (enter == 4)
-    {
+    {   
         DeletePlayerNode();
     }
 }
