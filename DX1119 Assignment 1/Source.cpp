@@ -12,6 +12,6 @@ int main()
 		PrintNumbers(); // UI
 		playerMap.PrintPath(); // Prints the map/indicator
 		playerMap.UserMovement(UserInput()); // UserInput function
-		system("CLS");
+		system("CLS"); // Clear screen
 	}
 };

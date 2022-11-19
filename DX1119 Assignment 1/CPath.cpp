@@ -41,8 +41,8 @@ void CPath::AddPlayerNode(char w) // Need to check if playerPosition has travers
 {
     CNode* temp = head; // 2 temps that point to head
     CNode* temp2;
-    if (head->GetNextNode() == nullptr)
-        return;
+    if (head->GetNextNode() == nullptr) 
+        AddInitNode('w'); // Init a new 'w' node if there is only one node in LL left
     else
     {
         while (temp != indicator) // Traverse until temp reaches indicator
@@ -172,5 +172,10 @@ void CPath::UserMovement(int enter)
     else if (enter == 4) // DeleteNode option 4
     {   
         DeletePlayerNode();
+    }
+    else
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 }
