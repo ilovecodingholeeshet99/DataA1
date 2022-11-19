@@ -43,6 +43,15 @@ void CPath::AddPlayerNode(char w) // Need to check if playerPosition has travers
     CNode* temp2;
     if (head->GetNextNode() == nullptr) 
         AddInitNode('w'); // Init a new 'w' node if there is only one node in LL left
+    else if (indicator == tail) // If player adds when indicator at node 'E'
+    {
+        CNode* newNode = new CNode; // Allocate memory for newNode
+        indicator->SetChar('o'); // Set old tail char to be 'o'
+        newNode->SetChar('E'); // Set char of newNode to be 'E', end of list
+        indicator->SetNextNode(newNode); // Indicator next node points to the tail/newNode
+        newNode->SetPrevNode(indicator); // prevNode of tail/newNode points to old tail indicator
+        tail = newNode; // Set tail to point to the newNode denoting end of LL
+    }
     else
     {
         while (temp != indicator) // Traverse until temp reaches indicator
