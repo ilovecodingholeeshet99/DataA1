@@ -10,8 +10,8 @@ int main()
 	{
 		EnlargeTextSize(); // Sets console size text
 		PrintNumbers(); // UI
-		playerMap.PrintPath();
-		playerMap.UserMovement(UserInput());
+		playerMap.PrintPath(); // Prints the map/indicator
+		playerMap.UserMovement(UserInput()); // UserInput function
 		system("CLS");
 	}
 };

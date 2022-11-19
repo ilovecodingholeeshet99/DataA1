@@ -10,12 +10,12 @@ private:
 	CNode* prevNode;
 public:
 	CNode(); 
-	// Getters
-	char GetInfo();
+	// ----------- Getters -------------
+	char GetInfo(); //
 	CNode* GetNextNode();
 	CNode* GetPrevNode();
 	char* GetCharPointer();
-	// Setters
+	// ----------- Setters -------------
 	void SetNextNode(CNode* next);
 	void SetChar(char newChar);
 	void SetPrevNode(CNode* prev);

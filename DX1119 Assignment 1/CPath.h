@@ -14,7 +14,6 @@ public:
 	CNode* GetTail();
 	// ---------- Data manipulation --------
 	void AddInitNode(char map);
-	void DeleteNode(CNode* playerPosition);
 	void AddPlayerNode(char w); // AddPlayerNode function handles adding nodes whenever user presses 3
 	void DeletePlayerNode(); // DeletePlayerNode function deletes the node whereever the player's indicator is
 	// ------------- Printing -----------

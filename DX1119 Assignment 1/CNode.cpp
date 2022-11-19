@@ -2,7 +2,8 @@
 
 CNode::CNode()
 {
-    charPointer = &playerChar;
+    playerChar = 'S';
+    charPointer = &playerChar; // Temp playerChar to init charPointer
     *charPointer = 'S';
     nextNode = nullptr;
     prevNode = nullptr;
@@ -30,8 +31,8 @@ void CNode::SetNextNode(CNode* next)
 
 void CNode::SetChar(char newChar)
 {
-    *charPointer= newChar;
- }
+    *charPointer= newChar; // Set value of charPtr to whatever character we put in
+}
 
 void CNode::SetPrevNode(CNode* prevPointer)
 {

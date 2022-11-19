@@ -37,52 +37,63 @@ void CPath::AddInitNode(char map) // Functions adding nodes to back of LL, a ini
     }
 }
 
-void CPath::DeleteNode(CNode* NodeToDelete)
-{
-    CNode* beforeDel = head; // Create a beforeDel pointer to point to start of LL totraverse LL
-    CNode* afterDel = head;
-    while (beforeDel->GetNextNode() != NodeToDelete && afterDel->GetNextNode() != NodeToDelete->GetNextNode()) // Go to node before node to delete and node after the one we want to del
-    {
-        beforeDel = beforeDel->GetNextNode(); // Make beforeDel traverse until before node to delete
-        afterDel = afterDel->GetNextNode(); // Make afterDel traverse until after node to delete
-    }
-    beforeDel->SetNextNode(NodeToDelete->GetNextNode()); // Make temp point to node after the node we want to delete
-    afterDel->SetPrevNode(beforeDel);
-    delete NodeToDelete; // Delete node to delete
-}
-
 void CPath::AddPlayerNode(char w) // Need to check if playerPosition has traversed until the indicator
 {
     CNode* temp = head; // 2 temps that point to head
     CNode* temp2;
-    while (temp != indicator) // Traverse until temp reaches indicator
+    if (head->GetNextNode() == nullptr)
+        return;
+    else
     {
-        temp = temp->GetNextNode();
+        while (temp != indicator) // Traverse until temp reaches indicator
+        {
+            temp = temp->GetNextNode();
+        }
+        temp2 = temp->GetNextNode(); // Now that temp points to the indicator, set Temp2 to point to temp/indicators next node
+        CNode* newNode = new CNode; // Node to add
+        newNode->SetChar('w');
+        temp->SetNextNode(newNode); // Temp/Indicator next node is the newNode created
+        newNode->SetPrevNode(temp); // newNode previous pointer points to the temp/indicator
+        newNode->SetNextNode(temp2); // Setting the newNode's new node to point to temp2, which points to indicators old next node
+        temp2->SetPrevNode(newNode); // Setting indicators old next node's previous node to point to the newNode created
     }
-    temp2 = temp->GetNextNode(); // Now that temp points to the indicator, set Temp2 to point to temp/indicators next node
-    CNode* newNode = new CNode; // Node to add
-    newNode->SetChar('w');
-    temp->SetNextNode(newNode); // Temp/Indicator next node is the newNode created
-    newNode->SetPrevNode(temp); // newNode previous pointer points to the temp/indicator
-    newNode->SetNextNode(temp2); // Setting the newNode's new node to point to temp2, which points to indicators old next node
-    temp2->SetPrevNode(newNode); // Setting indicators old next node's previous node to point to the newNode created
 }
 
 void CPath::DeletePlayerNode()
 {
-    CNode* temp = head; // Temp pointer to point to node before indicator
-    CNode* temp2 = head; // Another temp ptr to point to node after indicator
-    while (temp->GetNextNode() != indicator) // While temp's next node is not the indicator
+    CNode* temp = head; // Temp pointer to point to indicator
+    CNode* temp2 = head; // Another temp ptr to point to node before indicator
+    CNode* temp3 = head; // Temp pointer to point to node after indicator
+    if (head->GetNextNode() == nullptr) // If head's link is nullptr, return 
+        return; 
+    else if (indicator == head) // If player deletes at the head, check if indicator is at head first
     {
-        temp = temp->GetNextNode(); 
+        indicator = indicator->GetNextNode(); // Point indicator to the node next to it
+        indicator->SetChar('S');
+        indicator->SetPrevNode(nullptr); // Set previous node of indicator to nullptr because node next to indicator is now new head
+        head = indicator; // Set head to point to indicator as node beside indicator is new start of LL
     }
-    temp2 = indicator->GetNextNode();
-    // At the node before the indicator
-    temp->SetNextNode(temp2);
-    temp2->SetPrevNode(temp);
-    delete indicator;
+    else if (indicator == tail) // If player deletes at the end of the list E
+    {
+        indicator = indicator->GetPrevNode(); // Set the indicator to point to the node beforehand
+        indicator->SetChar('E');
+        indicator->SetNextNode(nullptr); // Previous node of indicator must point to nullptr to denote end of LL
+        tail = indicator; // Set tail to point to indicator so that indicator is pointing to the last node of the LL
+    }
+    else
+    {
+        while (temp != indicator) 
+        {
+            temp = temp->GetNextNode(); // Keep traversing until indicator
+        }
+        temp2 = temp->GetPrevNode(); // Temp2 points to node before indicator
+        temp3 = temp->GetNextNode(); // Temp3 points to node after indicator
+        temp2->SetNextNode(temp3); // Node before indicator next node points to node after indicator
+        temp3->SetPrevNode(temp2); // Prevnode of node after indicator points to node before indicator instead of indicator 
+        delete indicator;
+        indicator = temp3; // Set indicator to point to node after indicator
+    }
 }
-
 
 void CPath::PrintPath()
 {
@@ -104,7 +115,7 @@ void CPath::PrintPath()
         count += 1;
         if (count == 20) // 20 so end of row does not end with '-'
         {
-            count = 0;
+            count = 0; // Reset count to zero so PrintPath checks all rows to endl
             std::cout << std::endl;
             PrintIndicator(start);
             start = temp;
@@ -112,7 +123,7 @@ void CPath::PrintPath()
         }
     }
     std::cout << std::endl; // Endl to go to next line after end of LL
-    PrintIndicator(start);
+    PrintIndicator(start); // Print Indicator again so that indicator prints on the third row
     std::cout << std::endl; 
 }
 
@@ -124,7 +135,7 @@ void CPath::PrintIndicator(CNode* start) // Prints indicator and locates where i
             std::cout << "^ "; // Print ^ if yes
         else
             std::cout << "  "; // Print space 
-        if (start->GetNextNode() != nullptr)
+        if (start->GetNextNode() != nullptr) // Traverse the LL
         {
             start = start->GetNextNode();
         }
@@ -143,6 +154,8 @@ void CPath::UserMovement(int enter)
     }
     else if (enter == 2)
     {
+        if (head->GetNextNode() == nullptr) // Need to check if player tries to move forward when there is only 1 node in the LL
+            return;
         if (indicator->GetNextNode() == nullptr)
         {
             indicator = tail->GetPrevNode(); // Indicator will point to the previous last node IF player moves after the End(E) node
@@ -150,14 +163,13 @@ void CPath::UserMovement(int enter)
             AddInitNode('E'); // Keep adding E at the back if player keeps moving forward past E
             /*return;*/
         }
-
         indicator = indicator->GetNextNode();
     }
-    else if (enter == 3)
+    else if (enter == 3) // AddNode option 3
     {
-        AddPlayerNode('w');
+        AddPlayerNode('w'); // Add 'w' if player want to add node
     }
-    else if (enter == 4)
+    else if (enter == 4) // DeleteNode option 4
     {   
         DeletePlayerNode();
     }
