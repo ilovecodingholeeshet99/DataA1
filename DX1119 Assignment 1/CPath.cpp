@@ -41,15 +41,17 @@ void CPath::AddPlayerNode(char w) // Need to check if playerPosition has travers
 {
     CNode* temp = head; // 2 temps that point to head
     CNode* temp2;
-    if (head->GetNextNode() == nullptr)
-        AddInitNode('w'); // Init a new 'w' node if there is only one node in LL left
-    else if (indicator == tail) // If player adds when indicator at node 'E'
+    if (indicator == tail) // If player adds when indicator at node 'E'
     {
-            CNode* newNode = new CNode; // Allocate memory for newNode
-            indicator->SetChar('o'); // Set old tail char to be 'o'
+        CNode* newNode = new CNode; // Allocate memory for newNode
+        if (indicator->GetPrevNode() == nullptr)
+            indicator->SetChar('S');
+        else
+            indicator->SetChar('w'); // Set old tail char to be 'o
             newNode->SetChar('E'); // Set char of newNode to be 'E', end of list
             indicator->SetNextNode(newNode); // Indicator next node points to the tail/newNode
             newNode->SetPrevNode(indicator); // prevNode of tail/newNode points to old tail indicator
+            newNode->SetNextNode(nullptr);
             tail = newNode; // Set tail to point to the newNode denoting end of LL
     }
     //{
@@ -75,6 +77,10 @@ void CPath::AddPlayerNode(char w) // Need to check if playerPosition has travers
     //        }
     //    }*/
     //}
+    else if (head->GetNextNode() == nullptr)
+    {
+        AddInitNode('E'); // Init a new 'w' node if there is only one node in LL left
+    }
     else 
     {
         while (temp != indicator) // Traverse until temp reaches indicator
@@ -100,14 +106,18 @@ void CPath::DeletePlayerNode()
         return; 
     else if (indicator == head) // If player deletes at the head, check if indicator is at head first
     {
+        CNode* todel = indicator;
         indicator = indicator->GetNextNode(); // Point indicator to the node next to it
+        delete todel;
         indicator->SetChar('S');
         indicator->SetPrevNode(nullptr); // Set previous node of indicator to nullptr because node next to indicator is now new head
         head = indicator; // Set head to point to indicator as node beside indicator is new start of LL
     }
     else if (indicator == tail) // If player deletes at the end of the list E
     {
+        CNode* todel = indicator;
         indicator = indicator->GetPrevNode(); // Set the indicator to point to the node beforehand
+        delete todel;
         indicator->SetChar('E');
         indicator->SetNextNode(nullptr); // Previous node of indicator must point to nullptr to denote end of LL
         tail = indicator; // Set tail to point to indicator so that indicator is pointing to the last node of the LL
