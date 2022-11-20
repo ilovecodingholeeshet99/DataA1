@@ -26,7 +26,7 @@ void PrintNumbers()
 void InitNodes(CPath* map)
 {
 	map->AddInitNode('S'); // Entry map node
-	for (int i = 0; i <= 50; i++)
+	for (int i = 0; i <= 48; i++)
 	{
 		map->AddInitNode('o');
 	}
