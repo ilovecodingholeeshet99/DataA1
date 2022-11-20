@@ -41,18 +41,41 @@ void CPath::AddPlayerNode(char w) // Need to check if playerPosition has travers
 {
     CNode* temp = head; // 2 temps that point to head
     CNode* temp2;
-    if (head->GetNextNode() == nullptr) 
+    if (head->GetNextNode() == nullptr)
         AddInitNode('w'); // Init a new 'w' node if there is only one node in LL left
     else if (indicator == tail) // If player adds when indicator at node 'E'
     {
-        CNode* newNode = new CNode; // Allocate memory for newNode
-        indicator->SetChar('o'); // Set old tail char to be 'o'
-        newNode->SetChar('E'); // Set char of newNode to be 'E', end of list
-        indicator->SetNextNode(newNode); // Indicator next node points to the tail/newNode
-        newNode->SetPrevNode(indicator); // prevNode of tail/newNode points to old tail indicator
-        tail = newNode; // Set tail to point to the newNode denoting end of LL
+            CNode* newNode = new CNode; // Allocate memory for newNode
+            indicator->SetChar('o'); // Set old tail char to be 'o'
+            newNode->SetChar('E'); // Set char of newNode to be 'E', end of list
+            indicator->SetNextNode(newNode); // Indicator next node points to the tail/newNode
+            newNode->SetPrevNode(indicator); // prevNode of tail/newNode points to old tail indicator
+            tail = newNode; // Set tail to point to the newNode denoting end of LL
     }
-    else
+    //{
+    //  /*  else if (indicator->GetNextNode() == nullptr && indicator->GetPrevNode() == nullptr)
+    //    {
+    //        if (indicator->GetInfo() == 'S')
+    //        {
+    //            indicator->SetChar('S');
+    //            CNode* newNode = new CNode;
+    //            newNode->SetChar('E');
+    //            indicator->SetNextNode(newNode);
+    //            newNode->SetPrevNode(indicator);
+    //            tail = newNode;
+    //            head = indicator;
+    //        }
+    //        else if (indicator->GetInfo() == 'E')
+    //        { 
+    //            CNode* newNode = new CNode;
+    //            newNode->SetChar('E');
+    //            indicator->SetNextNode(newNode);
+    //            newNode->SetPrevNode(indicator);
+    //            tail = newNode;
+    //        }
+    //    }*/
+    //}
+    else 
     {
         while (temp != indicator) // Traverse until temp reaches indicator
         {
@@ -170,7 +193,6 @@ void CPath::UserMovement(int enter)
             indicator = tail->GetPrevNode(); // Indicator will point to the previous last node IF player moves after the End(E) node
             tail->SetChar('o'); // Set char to 'o' if player moves forward after reaching E
             AddInitNode('E'); // Keep adding E at the back if player keeps moving forward past E
-            /*return;*/
         }
         indicator = indicator->GetNextNode();
     }
